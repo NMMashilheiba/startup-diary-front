@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import EmptyList from "../../components/Common/EmptyList";
 import BlogList from "../../components/Home/BlogList";
 import Header from "../../components/Home/Header";
@@ -7,7 +7,7 @@ import { blogList } from "../../config/data";
 
 const Home = () => {
   const [blogs, setBlogs] = useState(blogList);
-  const [searchKey, setsearchKey] = useState("");
+  const [searchKey, setSearchKey] = useState("");
 
   // Search submit
   const handleSearchSubmit = (event) => {
@@ -16,20 +16,25 @@ const Home = () => {
   };
 
   // Search for blogs by category
-  const handleSearchResult = () => {
+  const handleSearchResult = (e) => {
+    // setSearchKey(e.target.value);
     const allBlogs = blogList;
     const filteredBlogs = allBlogs.filter((blog) =>
       blog.category.toLowerCase().includes(searchKey.toLowerCase().trim())
     );
-    // console.log(filteredBlogs);
+    // console.log(searchKey);
     setBlogs(filteredBlogs);
   };
 
   // Clear search
   const handleClearSearch = () => {
     setBlogs(blogList);
-    setsearchKey("");
+    setSearchKey("");
   };
+
+  useEffect(() => {
+    handleSearchResult();
+  }, [searchKey]);
 
   return (
     <div>
@@ -42,8 +47,8 @@ const Home = () => {
         clearSearch={handleClearSearch}
         formSubmit={handleSearchSubmit}
         handleSearchKey={(e) => {
-          setsearchKey(e.target.value);
-          handleSearchResult();
+          setSearchKey(e.target.value);
+          // console.log(searchKey);
         }}
       />
 
